@@ -1,5 +1,9 @@
 // @ts-check
 const { test, expect } = require('@playwright/test');
+// const { LoginPage } = require('../pageObjects/LoginPage');
+// const { DropDownPage } = require('../pageObjects/DropDownPage');
+const { POManager } = require('../pageObjects/POManager');
+const dataset = JSON.parse(JSON.stringify(require("../utils/loginTestData.json")));
 
 test('has title', async function ({ page }) {
   //Navigation
@@ -33,21 +37,30 @@ test('drag and drop', async function ({ page }) {
 });
 
 test('DropDown', async function ({ page }) {
-  await page.goto('https://the-internet.herokuapp.com/');
-  // Click the Form Authentication link.
+  const pomanager = new POManager(page);
+  const loginpage = pomanager.getLoginPage(); //new LoginPage(page);
+  const dropdownpage = pomanager.getDropDownPage();//new DropDownPage(page);
+
+  await loginpage.goTo();
+  // Click the drop down link.
   await page.getByRole('link', { name: 'Dropdown' }).click();
-  const dropdownElement = page.locator('#dropdown');
-  await dropdownElement.selectOption({ value: "1" });
-  await expect(dropdownElement).toHaveValue("1");
+  await dropdownpage.selectFirstOption();
+  await expect(dropdownpage.dropdownElement).toHaveValue("1");
 });
 
 test('Label and Textbox : Authentication', async ({ page }) => {
-  await page.goto('https://the-internet.herokuapp.com/');
+  // const username = "tomsmith";
+  // const password = "SuperSecretPassword!";
+  const pomanager = new POManager(page);
+  const loginpage = pomanager.getLoginPage();//new LoginPage(page);
+  await loginpage.goTo();
   // Click the Form Authentication link.
   await page.getByRole('link', { name: 'Form Authentication' }).click();
-  await page.getByLabel('Username').fill("tomsmith");
-  await page.getByLabel('Password').fill("SuperSecretPassword!");
-  await page.getByRole('button', { name: 'Login' }).click();
+  // await page.getByLabel('Username').fill("tomsmith");
+  // await page.getByLabel('Password').fill("SuperSecretPassword!");
+  // await page.getByRole('button', { name: 'Login' }).click();
+  await loginpage.validLogin(dataset.username, dataset.password);
+
   expect(page.getByRole('heading', { name: 'Secure Area', level: 2 }));
 });
 
