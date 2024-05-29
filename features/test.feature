@@ -1,5 +1,7 @@
+@login
 Feature: Login Validations
 
+@login_validCredential
 Scenario: Login with valid credential
 Given User is on login page
 When User provide valid username "tomsmith" and password "SuperSecretPassword!" and click on login button

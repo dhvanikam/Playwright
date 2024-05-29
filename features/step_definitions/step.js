@@ -4,9 +4,9 @@ const { expect } = require('@playwright/test');
 const { firefox } = require('playwright');
 
 Given('User is on login page', async function () {
-    const browser = await firefox.launch();
-    this.page = await browser.newPage();
-    this.pomanager = new POManager(this.page);
+    // const browser = await firefox.launch();
+    // this.page = await browser.newPage();
+    // this.pomanager = new POManager(this.page);
     const loginpage = this.pomanager.getLoginPage();
     await loginpage.goTo();
     await loginpage.goToAuthPage();
